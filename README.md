@@ -22,3 +22,24 @@ pip install -r requirements
 alembic init alembic
 ```
 
+5. create a ```.env``` file in the main directory, which should look like
+```bash
+DATABASE_URL=postgresql+asyncpg://postgres:**********@localhost/ChatbotApplicationDatabase
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=ChatbotApplicationDatabase
+DB_USER=postgres
+DB_PASSWORD:**********
+
+# Application Settings
+APP_NAME=Chatbot Application
+DEBUG=true 
+```
+
+6. In the main directory, run the application, using
+```bash
+uvicorn main:app --reload
+```
+
+
+
