@@ -20,7 +20,7 @@ class Message(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     conversation_id: Mapped[int] = mapped_column(ForeignKey('conversations.id'), nullable=False) # TODO: Add cascade delete
-    prompt_comtemt: Mapped[str] = mapped_column(nullable=False)
+    prompt_content: Mapped[str] = mapped_column(nullable=False)
     response_content: Mapped[str] = mapped_column(nullable=False)
     prompt_tokens: Mapped[int] = mapped_column(nullable=False)
     response_tokens: Mapped[int] = mapped_column(nullable=False)
