@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from database import engine, init_db
 
-from typing import Annotated
+from typing import Annotated, List
 
 from database import DBSessionDep
 from models import Conversation
@@ -11,6 +11,7 @@ from schemas import ConversationCreate, ConversationOut, ConversationUpdate
 from sqlalchemy import select
 
 from routers.conversations import router as conversations_router
+from routers.llm import router as llm_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -19,6 +20,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(conversations_router)
+app.include_router(llm_router)
 
 @app.get("/")
 async def healthy_check():
@@ -47,7 +49,7 @@ GetConversationDep = Annotated[Conversation, Depends(get_conversation)]
 @app.get("/conversations")
 async def list_conversations_controller(
     session: DBSessionDep, skip: int = 0, take: int = 100
-) -> list[ConversationOut]:
+) -> List[ConversationOut]:
     async with session.begin():
         result = await session.execute(
             select(Conversation).offset(skip).limit(take)
