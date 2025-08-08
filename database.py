@@ -11,8 +11,7 @@ engine = create_async_engine(SQLALCHEMY_DATABASE_URL, echo=True)
 
 async def init_db() -> None:
     async with engine.begin() as conn:
-        # Create all tables in the database
-        await conn.run_sync(Base.metadata.drop_all)
+        # Create all tables in the database (only if they don't exist)
         await conn.run_sync(Base.metadata.create_all)
     print("Database initialized successfully.")
 
