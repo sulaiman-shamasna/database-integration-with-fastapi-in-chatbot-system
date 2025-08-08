@@ -1,6 +1,7 @@
-from datetime import datetime, UTC
+from datetime import datetime
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship, DeclarativeBase
+from typing import List, Optional
 
 class Base(DeclarativeBase):
     pass
@@ -10,10 +11,10 @@ class Conversation(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(nullable=False)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC), onupdate=datetime.now(UTC))
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now)
+    updated_at: Mapped[datetime] = mapped_column(default=datetime.now, onupdate=datetime.now)
     model_type: Mapped[str] = mapped_column(nullable=False)
-    messages: Mapped[list['Message']] = relationship(back_populates='conversation')
+    messages: Mapped[List['Message']] = relationship(back_populates='conversation')
 
 class Message(Base):
     __tablename__ = 'messages'
@@ -24,9 +25,9 @@ class Message(Base):
     response_content: Mapped[str] = mapped_column(nullable=False)
     prompt_tokens: Mapped[int] = mapped_column(nullable=False)
     response_tokens: Mapped[int] = mapped_column(nullable=False)
-    total_tokens: Mapped[int | None] = mapped_column(nullable=False)
-    is_success: Mapped[bool | None] = mapped_column(nullable=False, default=True)
-    status_code: Mapped[int | None] = mapped_column(nullable=False, default=200)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC), onupdate=datetime.now(UTC))
+    total_tokens: Mapped[Optional[int]] = mapped_column(nullable=False)
+    is_success: Mapped[Optional[bool]] = mapped_column(nullable=False, default=True)
+    status_code: Mapped[Optional[int]] = mapped_column(nullable=False, default=200)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now)
+    updated_at: Mapped[datetime] = mapped_column(default=datetime.now, onupdate=datetime.now)
     conversation: Mapped[Conversation] = relationship("Conversation", back_populates='messages')
