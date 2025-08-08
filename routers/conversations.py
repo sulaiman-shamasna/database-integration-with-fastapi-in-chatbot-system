@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, List
 from fastapi import APIRouter, Depends, HTTPException, status
 from services.conversations import ConversationService
 from models import Conversation, Message
@@ -25,7 +25,7 @@ async def get_conversation(
 GetConversationDep = Annotated[Conversation, Depends(get_conversation)]
 
 
-@router.get("/{conversation_id}/messages", response_model=list[MessageOut])
+@router.get("/{conversation_id}/messages", response_model=List[MessageOut])
 async def list_conversation_messages_controller(
     conversation: GetConversationDep,
     session: DBSessionDep,
@@ -37,7 +37,7 @@ async def list_conversation_messages_controller(
 @router.get("")
 async def list_conversations_controller(
     session: DBSessionDep, skip: int = 0, take: int = 100
-) -> list[ConversationOut]:
+) -> List[ConversationOut]:
     conversations = await ConversationService(session).list(skip, take)
     return [ConversationOut.model_validate(c) for c in conversations]
 
