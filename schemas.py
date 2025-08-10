@@ -1,6 +1,7 @@
 
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
+from typing import Optional
 
 class ConversationBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -27,8 +28,25 @@ class MessageOut(BaseModel):
     response_content: str
     prompt_tokens: int
     response_tokens: int
-    total_tokens: int | None
-    is_success: bool | None
-    status_code: int | None
+    total_tokens: Optional[int]
+    is_success: Optional[bool]
+    status_code: Optional[int]
     created_at: datetime
     updated_at: datetime
+
+class LLMConversationRequest(BaseModel):
+    prompt: str
+
+class LLMTextRequest(BaseModel):
+    prompt: str
+    conversation_id: int
+
+class LLMConversationResponse(BaseModel):
+    conversation_id: int
+    title: str
+    message: str
+
+class LLMTextResponse(BaseModel):
+    response: str
+    conversation_id: int
+    prompt: str
