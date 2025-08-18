@@ -22,9 +22,7 @@ class AppSettings(BaseSettings):
     # OpenAI settings
     openai_api_key: str = Field(..., env="OPENAI_API_KEY")
     
-    # Vector database settings
-    vector_db_type: str = Field(default="memory", env="VECTOR_DB_TYPE")
-    sentence_transformer_model: str = Field(default="all-MiniLM-L6-v2", env="SENTENCE_TRANSFORMER_MODEL")
+    # (Removed vector DB features) Left intentionally blank to reflect current scope
     
     @validator('openai_api_key')
     def validate_openai_api_key(cls, v):
