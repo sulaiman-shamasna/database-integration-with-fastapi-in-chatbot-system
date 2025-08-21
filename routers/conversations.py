@@ -3,8 +3,6 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from services.conversations import ConversationService
 from models import Conversation, Message
 from schemas import ConversationCreate, ConversationUpdate, ConversationOut, MessageOut
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 from database import DBSessionDep
 
 router = APIRouter(prefix="/conversations")
