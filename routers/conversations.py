@@ -40,7 +40,7 @@ async def list_conversations_controller(
     return [ConversationOut.model_validate(c) for c in conversations]
 
 
-@router.get("/{id}")
+@router.get("/{conversation_id}")
 async def get_conversation_controller(
     conversation: GetConversationDep,
 ) -> ConversationOut:
@@ -57,7 +57,7 @@ async def create_conversation_controller(
     return ConversationOut.model_validate(new_conversation)
 
 
-@router.put("/{id}", status_code=status.HTTP_202_ACCEPTED)
+@router.put("/{conversation_id}", status_code=status.HTTP_202_ACCEPTED)
 async def update_conversation_controller(
     conversation: GetConversationDep,
     updated_conversation: ConversationUpdate,
@@ -69,7 +69,7 @@ async def update_conversation_controller(
     return ConversationOut.model_validate(updated_conversation)
 
 
-@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{conversation_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_conversation_controller(
     conversation: GetConversationDep, session: DBSessionDep
 ) -> None:
