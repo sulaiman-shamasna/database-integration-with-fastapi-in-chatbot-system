@@ -1,6 +1,5 @@
 from typing import Annotated
-from itertools import tee
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import DBSessionDep
@@ -9,9 +8,9 @@ from repositories.messages import MessageRepository
 from services.llm import LLMService
 from services.conversations import ConversationService
 from schemas import LLMConversationRequest, LLMTextRequest, LLMConversationResponse, LLMTextResponse
-import asyncio
 
 router = APIRouter(prefix="/llm")
+llm_service = LLMService()
 
 async def get_conversation(
     conversation_id: int, session: DBSessionDep
@@ -54,7 +53,6 @@ async def create_conversation_with_llm(
     session: DBSessionDep,
 ) -> LLMConversationResponse:
     """Create a new conversation with AI-generated title"""
-    llm_service = LLMService()
     conversation = await llm_service.create_conversation_with_title(request.prompt, session)
     return LLMConversationResponse(
         conversation_id=conversation.id,
@@ -64,7 +62,6 @@ async def create_conversation_with_llm(
 
 async def stream_generator(prompt: str, conversation_id: int, session: AsyncSession):
     """Generator for streaming response"""
-    llm_service = LLMService()
     response_content = ""
     
     async for chunk in llm_service.stream_response(prompt, conversation_id):
@@ -96,8 +93,6 @@ async def generate_text_controller(
 ) -> LLMTextResponse:
     """Generate text response and store message"""
     conversation = await get_conversation(request.conversation_id, session)
-    
-    llm_service = LLMService()
     
     response_content = ""
     async for chunk in llm_service.stream_response(request.prompt, request.conversation_id):
