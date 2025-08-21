@@ -14,13 +14,19 @@ class Conversation(Base):
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
     updated_at: Mapped[datetime] = mapped_column(default=datetime.now, onupdate=datetime.now)
     model_type: Mapped[str] = mapped_column(nullable=False)
-    messages: Mapped[List['Message']] = relationship(back_populates='conversation')
+    messages: Mapped[List['Message']] = relationship(
+        back_populates='conversation',
+        cascade="all, delete-orphan"
+    )
 
 class Message(Base):
     __tablename__ = 'messages'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    conversation_id: Mapped[int] = mapped_column(ForeignKey('conversations.id'), nullable=False) # TODO: Add cascade delete
+    conversation_id: Mapped[int] = mapped_column(
+        ForeignKey('conversations.id', ondelete='CASCADE'),
+        nullable=False
+    )
     prompt_content: Mapped[str] = mapped_column(nullable=False)
     response_content: Mapped[str] = mapped_column(nullable=False)
     prompt_tokens: Mapped[int] = mapped_column(nullable=False)
