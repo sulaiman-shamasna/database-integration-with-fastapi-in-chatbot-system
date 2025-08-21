@@ -3,7 +3,6 @@ from settings import AppSettings
 from models import Conversation
 from repositories.conversations import ConversationRepository
 from sqlalchemy.ext.asyncio import AsyncSession
-import asyncio
 
 settings = AppSettings()
 
